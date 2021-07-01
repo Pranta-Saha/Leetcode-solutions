@@ -1,0 +1,64 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+// I just made a map of preants of each node, then travas from 'p' to root using map and keep path node in a set.
+// then again travas from 'q' to root, and keep searching whether a node is in the set. The node I first time found is ans. :)
+ 
+class Solution {
+public:
+    unordered_map<int,int>prnt;
+    void dfs(TreeNode *src)
+    {
+        if(src->left != nullptr)
+        {
+            prnt[src->left->val]=src->val;
+            dfs(src->left);
+        }
+        if(src->right != nullptr)
+        {
+            prnt[src->right->val]=src->val;
+            dfs(src->right);
+        }
+    }
+    TreeNode* findd(TreeNode *src, int ans)
+    {
+        if(src->val==ans) return src;
+        TreeNode* x,* y;
+        if(src->left != nullptr)
+        {
+            x=findd(src->left,ans);
+        }
+        if(src->right != nullptr)
+        {
+            y=findd(src->right,ans);
+        }
+        if(x->val==ans) return x;
+        return y;
+    }
+    
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        int pp = p->val, qq = q->val,ans=root->val;
+        unordered_set<int>st;
+        dfs(root);
+        cout<<root->val<<' '<<pp<<" "<<qq<<endl;
+        cout<<prnt.size();
+        while(pp!=root->val)
+        {
+            st.insert(pp);
+            pp = prnt[pp];
+        }
+        while(qq!=root->val)
+        {
+            if(st.count(qq)!=0){ans=qq; break;}
+            qq = prnt[qq];
+        }
+        return findd(root,ans);
+    }
+};

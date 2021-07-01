@@ -1,0 +1,33 @@
+// Starting from i=0, I just check from position j=0 to n-1 (right to left) of binary form of i, 
+// whether the new 'i' getting by fliping j-th bit missing in set, if so, then push it into ans 
+// new 'i' will be the number after flip. :) 
+
+class Solution {
+public:
+    vector<int> grayCode(int n) {
+        unordered_set<int>st;
+        int i=0,j,tmp,flag=1;
+        vector<int>ans;
+        ans.push_back(i);
+        st.insert(i);
+        while(flag)
+        {
+            flag=0;
+            for(j=0;j<n;j++)
+            {
+                tmp=i;
+                if(((i)&(1<<(j)))>0) (tmp) &= (~(1<<(j)));
+                else (tmp) |= (1<<(j));
+                if(st.find(tmp)==st.end())
+                {
+                    i=tmp;
+                    st.insert(i);
+                    ans.push_back(i);
+                    flag=1;
+                    break;
+                }
+            }
+        }
+        return ans;
+    }
+};

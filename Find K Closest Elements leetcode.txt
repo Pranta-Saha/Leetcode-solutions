@@ -1,0 +1,45 @@
+// two pointer methode
+// right pointer is on immediate greater valu of x 
+// and left pointer is just on previous of right pointer
+// I collect numbers just comparing these two pointer :)
+
+
+class Solution {
+public:
+    vector<int> findClosestElements(vector<int>& arr, int k, int x) {
+        auto rht=upper_bound(arr.begin(),arr.end(),x);
+        auto lft=rht;
+        lft--;
+        auto lftend=arr.begin();
+        lftend--;
+        vector<int>ans;
+        while(k--)
+        {
+            if(rht==arr.end())
+            {
+                ans.push_back(*lft);
+                lft--;
+            }
+            else if(lft==lftend)
+            {
+                ans.push_back(*rht);
+                rht++;
+            }
+            else 
+            {
+                if(abs(x-*lft)<=abs(x-*rht))
+                {
+                    ans.push_back(*lft);
+                    lft--;
+                }
+                else
+                {
+                    ans.push_back(*rht);
+                    rht++;
+                }
+            }
+        }
+        sort(ans.begin(),ans.end());
+        return ans;
+    }
+};
